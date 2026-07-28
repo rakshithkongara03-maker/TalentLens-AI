@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Uploaded files
+backend/uploads/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Python test cache
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
