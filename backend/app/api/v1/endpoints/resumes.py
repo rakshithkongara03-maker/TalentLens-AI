@@ -27,6 +27,11 @@ async def upload_resume(
     destination = UPLOAD_DIRECTORY / unique_filename
 
     file_content = await file.read()
+    if len(file_content) > MAX_FILE_SIZE:
+      raise HTTPException(
+        status_code=400,
+        detail="Resume file size must be 5 MB or less.",
+    )
 
     with destination.open("wb") as saved_file:
         saved_file.write(file_content)
