@@ -2,6 +2,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from fastapi import HTTPException, UploadFile
+from app.services.resume_parser import clean_text, extract_text
 
 UPLOAD_DIRECTORY = Path("uploads/resumes")
 UPLOAD_DIRECTORY.mkdir(parents=True, exist_ok=True)
@@ -32,6 +33,8 @@ async def save_resume(file: UploadFile) -> dict[str, object]:
 
     with destination.open("wb") as saved_file:
         saved_file.write(file_content)
+        extracted_text = extract_text(destination)
+        extracted_text = clean_text(extracted_text)
 
     return {
         "original_filename": file.filename,
@@ -39,4 +42,5 @@ async def save_resume(file: UploadFile) -> dict[str, object]:
         "content_type": file.content_type,
         "size_bytes": len(file_content),
         "status": "uploaded",
+        "extracted_text": extracted_text,
     }
