@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
 
+
 load_dotenv()
 
 client = OpenAI(
@@ -11,12 +12,26 @@ client = OpenAI(
 )
 
 
+class ExperienceItem(BaseModel):
+    company: str | None
+    title: str | None
+    start_date: str | None
+    end_date: str | None
+    summary: str | None
+
+
+class EducationItem(BaseModel):
+    degree: str | None
+    institution: str | None
+    graduation_year: str | None
+
+
 class ResumeAnalysis(BaseModel):
     name: str | None
     email: str | None
     skills: list[str]
-    experience: list[str]
-    education: list[str]
+    experience: list[ExperienceItem]
+    education: list[EducationItem]
 
 
 def analyze_resume(resume_text: str) -> dict[str, object]:
@@ -27,8 +42,12 @@ def analyze_resume(resume_text: str) -> dict[str, object]:
                 "role": "system",
                 "content": (
                     "Extract structured candidate information from the resume. "
-                    "Do not invent information. If a name or email is missing, return null. "
-                    "Return skills, experience, and education only when supported by the resume."
+                    "Do not invent information that is not present in the resume. "
+                    "If a value cannot be determined, return null. "
+                    "Extract each professional experience as a separate item with "
+                    "company, title, start date, end date, and a concise summary. "
+                    "Extract each education entry separately with degree, institution, "
+                    "and graduation year."
                 ),
             },
             {
