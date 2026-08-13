@@ -1,6 +1,6 @@
 from pathlib import Path
 from uuid import uuid4
-
+from app.ai.resume_analyzer import analyze_resume
 from fastapi import HTTPException, UploadFile
 from app.services.resume_parser import clean_text, extract_text
 
@@ -35,6 +35,7 @@ async def save_resume(file: UploadFile) -> dict[str, object]:
         saved_file.write(file_content)
         extracted_text = extract_text(destination)
         extracted_text = clean_text(extracted_text)
+        analysis = analyze_resume(extracted_text)
 
     return {
         "original_filename": file.filename,
@@ -43,4 +44,5 @@ async def save_resume(file: UploadFile) -> dict[str, object]:
         "size_bytes": len(file_content),
         "status": "uploaded",
         "extracted_text": extracted_text,
+        "analysis": analysis,
     }
