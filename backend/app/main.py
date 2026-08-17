@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api.v1.endpoints.health import router as health_router
+from app.api.v1.endpoints.jobs import router as jobs_router
 from app.api.v1.endpoints.resumes import router as resumes_router
 
 app = FastAPI(
@@ -10,6 +11,7 @@ app = FastAPI(
 
 app.include_router(health_router)
 app.include_router(resumes_router)
+app.include_router(jobs_router)
 
 @app.get("/")
 def root():
